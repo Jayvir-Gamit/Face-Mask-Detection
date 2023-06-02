@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Mask Detection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Jquary Router -->
+    <script src="https://cdn.jsdelivr.net/npm/jqueryrouter@2.2.11/dist/js/jquery.router.min.js"></script>
+</head>
+
+<body style="background-color: azure; background-image: url('../static/images/faceBg.jpg');">
+    <!-- <img src="../images/bg1.png" alt="loading..." style="vertical-align:middle"> -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="http://127.0.0.1:5000/">Face Mask Detection</a>
+            <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <!-- <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="http://127.0.0.1:5000/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:5000/externalVideo">External</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:5000/about">About</a>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </nav>
+
+    <!-- Body -->
+    <div style="height: 40rem; width: 75rem;  margin: auto; margin-top: 20px;">
+        <!-- To show video -->
+        <div class="position-relative" style="border: 2px solid blue; border-radius: 20px; height: 25rem; width: 50rem; margin: auto; margin-top:10px;">
+            <img id="setSrc" src="/static/images/bg.jpg" alt="To start detection click on button 'Start Detection'" width="100%" height="100%" style="vertical-align:middle; border-radius: 20px; opacity: 0.6;">
+            <!-- To load device video -->
+            <video style="display: none; width: 50rem; height: 25rem" id="Test_Video" controls>
+                <source id="mp4_source" type="video/mp4">
+            </video>
+        </div>
+
+
+        <!-- Button for Start video and Stop video -->
+        <div class="position-relative" style="border: 2px solid darkcyan; height: 5rem; width: 50rem; margin: auto; margin-top:10px; display: flex; justify-content: center; align-items: center;">
+            <button id="startVid" type="button" class="btn btn-outline-success m-2">Start Detection</button>
+            <button id="stopVid" type="button" class="btn btn-outline-danger m-2">Stop Detection</button>
+            <!-- <button id="extVid" type="button" class="btn btn-outline-primary m-2">External Video</button> -->
+            <!-- <button onclick="changeSrc()" type="button" class="btn btn-outline-primary m-2">Select Video</button> -->
+        </div>
+
+        <!-- To Device videos -->
+        <div class="position-relative" style="border: 2px solid darkcyan; height: 5rem; width: 50rem; margin: auto; margin-top:10px; display: flex; justify-content: center; align-items: center;">
+            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="video" id="vidVal">
+                <input type="submit" value="Upload" id="playVid">
+            </form>
+            <!-- <input type="file" name="video" id="vidVal">
+            <input type="submit" value="Upload" id="playVid"> -->
+        </div>
+    </div>
+
+</body>
+
+<script>
+    // let videoValue = document.querySelector("input").value;
+
+    $(document).ready(function () {
+
+        $("#startVid").click(function () {
+            // $.router.set({
+            //     route: '/detection'
+            // });
+
+
+
+            // $.router.set('/detection');
+            // location.reload(true)
+
+
+            $("#setSrc").attr("src","{{ url_for('webCam') }}")
+            $("#setSrc").css('opacity','1')
+        })
+
+        $("#stopVid").click(function () {
+            // $("#setSrc").attr("src","")
+            $("#setSrc").attr("src","/static/images/bg.jpg");
+            $("#setSrc").css('opacity','0.6')
+        })
+
+        // $("#extVid").click(function () {
+        //     $("#setSrc").attr("src","{{ url_for('setSRC') }}")
+        // })
+
+        // $("#playVid").click(function () {
+        //     $("#setSrc").attr("src","{{ url_for('upload') }}")
+        // })
+        
+
+    })
+
+
+
+</script>
+
+<style>
+    .navbar-brand{
+        font-weight: bold;
+        margin: auto;
+        position: relative;
+        animation-name: example;
+        animation-duration: 2s;
+        animation-timing-function: linear;
+        animation-delay: 3s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+
+    @keyframes example {
+        /* 0%   {color:darkblue; left:-20px; }
+        20%  {color:blue; left:-10px; }
+        40%  {color:lightblue; left:-5px; }
+        60%  {color:green; left:5px; }
+        80%  {color:yellow; left:10px; }
+        100% {color:orange; left:20px; } */
+        0%  {color:coral; left:-20px; }
+        25%  {color:blue; left:-10px; }
+        50%  {color:green; left:0px; }
+        75% {color:yellow; left:10px; }
+        100% {color:orange; left:20px; }
+    }
+</style>
+
+</html>
